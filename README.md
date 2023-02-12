@@ -1,4 +1,4 @@
-# flutter_snake_game
+# flutter_snake_and_ladder_game
 
 A new Flutter project.
 
