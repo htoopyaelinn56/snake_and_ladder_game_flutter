@@ -13,7 +13,7 @@ class Game extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: 30,
+            height: 15,
           ),
           Expanded(
             child: Board(),

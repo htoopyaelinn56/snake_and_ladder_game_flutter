@@ -1,9 +1,17 @@
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_game/src/game.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'dart:io' show Platform;
 
 final navigatorKey = GlobalKey<NavigatorState>();
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    await DesktopWindow.setWindowSize(const Size(500, 500));
+    await DesktopWindow.setMinWindowSize(const Size(400, 400));
+    await DesktopWindow.setMaxWindowSize(const Size(800, 800));
+  }
   runApp(const MyApp());
 }
 

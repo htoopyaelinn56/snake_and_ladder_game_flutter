@@ -20,11 +20,13 @@ class Board extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constrants) {
           return Container(
             constraints: Utils.isDesktop()
-                ? const BoxConstraints(maxWidth: 700, minWidth: 500)
+                ? const BoxConstraints(
+                    maxWidth: 650, minWidth: 650, maxHeight: 750)
                 : null,
             child: Stack(
               children: [
                 GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 10,
