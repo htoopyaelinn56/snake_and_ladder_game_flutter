@@ -23,12 +23,12 @@ class Game extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Snake And Ladder'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: isDesktop ? 55 : 15),
-          Expanded(
-            child: ResponsiveRowColumn(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: isDesktop ? 55 : 15),
+            ResponsiveRowColumn(
               layout: isDesktop
                   ? ResponsiveRowColumnType.ROW
                   : ResponsiveRowColumnType.COLUMN,
@@ -106,9 +106,9 @@ class Game extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 10),
-        ],
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }

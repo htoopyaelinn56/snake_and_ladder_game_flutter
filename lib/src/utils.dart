@@ -15,11 +15,10 @@ class Utils {
   }
 
   static Future<void> pagePusher(
-      {required Widget page,
-      required BuildContext context,
+      {required BuildContext context,
+      required Widget page,
       bool removeBackStack = false}) async {
-    Navigator.pushAndRemoveUntil(
-      context,
+    await Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => page),
       (_) => !removeBackStack,
     );

@@ -122,7 +122,9 @@ class Board extends StatelessWidget {
       minScale: 0.1,
       maxScale: 5,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         child: LayoutBuilder(builder: (context, constrants) {
           return Container(
             constraints: const BoxConstraints(maxWidth: 700),
@@ -138,8 +140,8 @@ class Board extends StatelessWidget {
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 10,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
