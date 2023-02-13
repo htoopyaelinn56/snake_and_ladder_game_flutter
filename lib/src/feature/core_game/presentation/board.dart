@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_game/src/feature/core_game/presentation/board_card.dart';
-import 'package:flutter_snake_game/src/feature/core_game/controller/player_controller.dart';
-import 'package:flutter_snake_game/src/utils.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/board_card.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
+import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 //index and points on ui
 const Map<int, int> _numbers = {

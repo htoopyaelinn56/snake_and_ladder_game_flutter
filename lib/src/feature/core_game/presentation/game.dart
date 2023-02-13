@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_game/src/feature/core_game/controller/player_controller.dart';
-import 'package:flutter_snake_game/src/feature/core_game/presentation/board.dart';
-import 'package:flutter_snake_game/src/common/common_button.dart';
-import 'package:flutter_snake_game/src/utils.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/board.dart';
+import 'package:flutter_snake_and_ladder_game/src/common/common_button.dart';
+import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 const List<Color> _playerColors = [
@@ -89,6 +89,7 @@ class Game extends StatelessWidget {
                                   'Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
                               const SizedBox(height: 5),
                               CommonButton(
+                                width: 90,
                                 onSubmit: () {
                                   ref
                                       .read(playerControllerProvider.notifier)

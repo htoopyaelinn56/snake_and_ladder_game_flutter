@@ -1,21 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_game/main.dart';
 import 'dart:math' as math;
-import 'package:flutter_snake_game/src/feature/core_game/domain/player_state_model.dart';
-import 'package:flutter_snake_game/src/feature/core_game/presentation/game.dart';
-import 'package:flutter_snake_game/src/utils.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/domain/player_state_model.dart';
 
 import '../domain/player_model.dart';
 
 class PlayerController extends StateNotifier<PlayerStateModel> {
   PlayerController()
       : super(
+          // dont constant it because it will be modified
           PlayerStateModel(
             players: [
-              PlayerModel(id: 0, position: 1),
-              PlayerModel(id: null, position: null),
-              PlayerModel(id: null, position: null),
-              PlayerModel(id: null, position: null),
+              PlayerModel(id: 0, position: 1, win: false),
+              PlayerModel(id: null, position: null, win: false),
+              PlayerModel(id: null, position: null, win: false),
+              PlayerModel(id: null, position: null, win: false),
             ],
             currentTurn: 0,
             totalPlayers: 1,
@@ -31,7 +29,6 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
 
   void dice() {
     final number = math.Random().nextInt(6) + 1;
-
     final newPosition =
         (state.players[state.currentTurn]?.position ?? 0) + number;
     state.players[state.currentTurn] =

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_game/main.dart';
-import 'package:flutter_snake_game/src/common/common_button.dart';
-import 'package:flutter_snake_game/src/feature/core_game/controller/player_controller.dart';
-import 'package:flutter_snake_game/src/feature/core_game/presentation/game.dart';
+import 'package:flutter_snake_and_ladder_game/main.dart';
+import 'package:flutter_snake_and_ladder_game/src/common/common_button.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/game.dart';
 
 import '../../../utils.dart';
 
@@ -56,12 +56,10 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
               onSubmit: () {
                 ref.read(playerControllerProvider.notifier).setPlayer(
                     playerCount: _PlayerType.values.indexOf(type) + 2);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Game(),
-                    ),
-                    (route) => false);
+                Utils.pagePusher(
+                    page: const Game(),
+                    context: context,
+                    removeBackStack: true);
               },
               child: const Text('Play'),
             ),

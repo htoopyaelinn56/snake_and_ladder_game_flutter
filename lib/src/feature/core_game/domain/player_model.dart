@@ -6,43 +6,28 @@ import 'package:equatable/equatable.dart';
 class PlayerModel extends Equatable {
   final int? id;
   final int? position;
+  final bool win;
   const PlayerModel({
     required this.id,
     required this.position,
+    required this.win,
   });
 
   PlayerModel copyWith({
     int? id,
     int? position,
+    bool? win,
   }) {
     return PlayerModel(
       id: id ?? this.id,
       position: position ?? this.position,
+      win: win ?? this.win,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'position': position,
-    };
-  }
-
-  factory PlayerModel.fromMap(Map<String, dynamic> map) {
-    return PlayerModel(
-      id: map['id'] as int,
-      position: map['position'] as int,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory PlayerModel.fromJson(String source) =>
-      PlayerModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool get stringify => true;
 
   @override
-  List<Object> get props => [id ?? '', position ?? ''];
+  List<Object> get props => [id ?? '', position ?? '', win];
 }
