@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_and_ladder_game/main.dart';
 import 'dart:math' as math;
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/domain/player_state_model.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
