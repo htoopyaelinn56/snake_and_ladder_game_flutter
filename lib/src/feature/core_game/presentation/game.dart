@@ -51,8 +51,8 @@ class Game extends StatelessWidget {
                         padding: EdgeInsets.only(
                             left: isDesktop ? 10 : 25, top: 10, right: 25),
                         child: Consumer(builder: (context, ref, _) {
-                          final playerList =
-                              ref.watch(playerControllerProvider).players;
+                          final playerController =
+                              ref.watch(playerControllerProvider);
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -72,13 +72,13 @@ class Game extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 3),
                                       Text(
-                                        '${orientation == Orientation.landscape && Utils.isMobileDevice() ? 'P' : 'Player'} ${index + 1} - ${playerList[index]?.position ?? 0} ',
+                                        '${orientation == Orientation.landscape && Utils.isMobileDevice() ? 'P' : 'Player'} ${index + 1} - ${playerController.players[index]?.position ?? 0} ',
                                       ),
                                     ],
                                   );
                                 },
                                 shrinkWrap: true,
-                                itemCount: playerList
+                                itemCount: playerController.players
                                     .where(
                                         (element) => element?.position != null)
                                     .toList()
@@ -90,11 +90,14 @@ class Game extends StatelessWidget {
                               const SizedBox(height: 5),
                               CommonButton(
                                 width: 90,
-                                onSubmit: () {
-                                  ref
-                                      .read(playerControllerProvider.notifier)
-                                      .dice();
-                                },
+                                onSubmit: playerController.someoneWins
+                                    ? null
+                                    : () {
+                                        ref
+                                            .read(playerControllerProvider
+                                                .notifier)
+                                            .dice();
+                                      },
                                 child: const Text('Dice'),
                               ),
                             ],

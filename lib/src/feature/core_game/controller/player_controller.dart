@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_snake_and_ladder_game/main.dart';
 import 'dart:math' as math;
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/domain/player_state_model.dart';
+import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 import '../domain/player_model.dart';
 
@@ -13,20 +16,19 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
           PlayerStateModel(
             // ignore: prefer_const_literals_to_create_immutables
             players: [
-              PlayerModel(id: 0, position: 98, win: false),
+              PlayerModel(id: 0, position: 1, win: false),
               PlayerModel(id: null, position: null, win: false),
               PlayerModel(id: null, position: null, win: false),
               PlayerModel(id: null, position: null, win: false),
             ],
             currentTurn: 0,
-            totalPlayers: 1,
+            totalPlayers: 1, someoneWins: false,
           ),
         );
 
   void setPlayer({required int playerCount}) {
     for (int i = 1; i < playerCount; i++) {
-      state.players[i] =
-          state.players[i]?.copyWith(id: i, position: i == 2 ? 90 : 1);
+      state.players[i] = state.players[i]?.copyWith(id: i, position: 1);
     }
     state = state.copyWith(players: state.players, totalPlayers: playerCount);
   }
@@ -45,20 +47,18 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       }
     }
 
-    if (state.currentTurn != state.players.length - 1 &&
-        state.players[state.currentTurn + 1]?.win == true) {
-      state = state.copyWith(
-          players: state.players, currentTurn: state.currentTurn + 2);
-    } else {
-      state = state.copyWith(
-          players: state.players, currentTurn: state.currentTurn + 1);
+    if (state.players[state.currentTurn]?.win == true) {
+      Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins',
+          width: 500);
+      state = state.copyWith(players: state.players, someoneWins: true);
+      return;
     }
+
+    state = state.copyWith(
+        players: state.players, currentTurn: state.currentTurn + 1);
 
     if (state.currentTurn >= state.totalPlayers) {
       state = state.copyWith(currentTurn: 0);
-      if (state.players[0]?.win == true) {
-        state = state.copyWith(players: state.players, currentTurn: 1);
-      }
     }
   }
 }
