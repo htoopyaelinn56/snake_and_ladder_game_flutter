@@ -63,9 +63,6 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ?.copyWith(position: snakeOrLadderPoition);
       }
 
-      print("Dice roll : $number");
-      print(state.players[state.currentTurn]);
-
       // If dice roll results in a position larger than 100, extra numbers will be subtracted.
       // This will results in longer and more interesting matches.
       if ((state.players[state.currentTurn]?.position ?? -1) > 100) {
