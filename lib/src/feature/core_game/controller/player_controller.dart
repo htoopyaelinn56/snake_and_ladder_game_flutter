@@ -21,6 +21,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ],
             currentTurn: 0,
             totalPlayers: 1, someoneWins: false,
+            isMoving: false,
           ),
         );
 
@@ -31,13 +32,11 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     state = state.copyWith(players: state.players, totalPlayers: playerCount);
   }
 
-  void dice() {
+  void dice() async {
     if (state.players[state.currentTurn]?.win == false) {
       final number = math.Random().nextInt(6) + 1;
-      final newPosition =
-          (state.players[state.currentTurn]?.position ?? 0) + number;
-      state.players[state.currentTurn] =
-          state.players[state.currentTurn]?.copyWith(position: newPosition);
+
+      await _moving(diceNumber: number);
 
       if ((state.players[state.currentTurn]?.position ?? -1) >= 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
@@ -58,6 +57,18 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     if (state.currentTurn >= state.totalPlayers) {
       state = state.copyWith(currentTurn: 0);
     }
+  }
+
+  Future<void> _moving({required int diceNumber}) async {
+    for (int i = 0; i <= diceNumber; i++) {
+      state = state.copyWith(isMoving: true);
+      await Future.delayed(const Duration(milliseconds: 300));
+      state.players[state.currentTurn] = state.players[state.currentTurn]
+          ?.copyWith(
+              position: (state.players[state.currentTurn]?.position ?? 1) + 1);
+      state = state.copyWith(players: state.players);
+    }
+    state = state.copyWith(isMoving: false);
   }
 }
 

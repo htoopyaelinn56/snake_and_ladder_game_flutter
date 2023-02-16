@@ -90,7 +90,8 @@ class Game extends StatelessWidget {
                               const SizedBox(height: 5),
                               CommonButton(
                                 width: 90,
-                                onSubmit: playerController.someoneWins
+                                onSubmit: playerController.someoneWins ||
+                                        playerController.isMoving
                                     ? null
                                     : () {
                                         ref

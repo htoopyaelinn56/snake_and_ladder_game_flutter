@@ -77,7 +77,7 @@ class BoardCard extends StatelessWidget {
 }
 
 class _PlayerCircle extends StatelessWidget {
-  const _PlayerCircle({super.key, required this.color});
+  const _PlayerCircle({required this.color});
   final Color color;
   @override
   Widget build(BuildContext context) {
