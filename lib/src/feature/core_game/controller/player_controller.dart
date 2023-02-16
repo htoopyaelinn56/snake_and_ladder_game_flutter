@@ -60,9 +60,9 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
   }
 
   Future<void> _moving({required int diceNumber}) async {
+    state = state.copyWith(isMoving: true);
     for (int i = 0; i <= diceNumber; i++) {
-      state = state.copyWith(isMoving: true);
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 100));
       state.players[state.currentTurn] = state.players[state.currentTurn]
           ?.copyWith(
               position: (state.players[state.currentTurn]?.position ?? 1) + 1);
