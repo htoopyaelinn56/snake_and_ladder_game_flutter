@@ -7,6 +7,19 @@ import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 import '../domain/player_model.dart';
 
+const Map<int, int> _snakeLadderPoints = {
+  12: 32,
+  15: 55,
+  21: 82,
+  22: 38,
+  54: 75,
+  69: 2,
+  76: 13,
+  87: 53,
+  91: 48,
+  98: 8,
+};
+
 class PlayerController extends StateNotifier<PlayerStateModel> {
   PlayerController()
       : super(
@@ -21,6 +34,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ],
             currentTurn: 0,
             totalPlayers: 1, someoneWins: false,
+            isMoving: false,
           ),
         );
 
@@ -31,13 +45,23 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     state = state.copyWith(players: state.players, totalPlayers: playerCount);
   }
 
-  void dice() {
-    if (state.players[state.currentTurn]?.win == false) {
+  void dice() async {
+    final currentTurn = state.currentTurn;
+    final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
+    if (state.players[currentTurn]?.win == false) {
       final number = math.Random().nextInt(6) + 1;
-      final newPosition =
-          (state.players[state.currentTurn]?.position ?? 0) + number;
-      state.players[state.currentTurn] =
-          state.players[state.currentTurn]?.copyWith(position: newPosition);
+
+      await _moving(diceNumber: number);
+
+      // state.players[currentTurn] = state.players[currentTurn]?.copyWith(
+      //     position: _snakeLadderPoints[currentPlayerPosition] ??
+      //         currentPlayerPosition);
+
+      final snakeOrLadderPoition = _snakeLadderPoints[currentPlayerPosition];
+      if (snakeOrLadderPoition != null) {
+        state.players[currentTurn] = state.players[currentTurn]
+            ?.copyWith(position: snakeOrLadderPoition);
+      }
 
       // If dice roll results in a position larger than 100, extra numbers will be subtracted.
       // This will results in longer and more interesting matches.
@@ -67,6 +91,18 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     if (state.currentTurn >= state.totalPlayers) {
       state = state.copyWith(currentTurn: 0);
     }
+  }
+
+  Future<void> _moving({required int diceNumber}) async {
+    state = state.copyWith(isMoving: true);
+    final currentTurn = state.currentTurn;
+    for (int i = 0; i < diceNumber; i++) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      state.players[currentTurn] = state.players[state.currentTurn]
+          ?.copyWith(position: (state.players[currentTurn]?.position ?? 1) + 1);
+      state = state.copyWith(players: state.players);
+    }
+    state = state.copyWith(isMoving: false);
   }
 }
 
