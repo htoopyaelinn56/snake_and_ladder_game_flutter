@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_game/src/feature/core_game/presentation/board_card.dart';
-import 'package:flutter_snake_game/src/feature/core_game/controller/player_controller.dart';
-import 'package:flutter_snake_game/src/utils.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/board_card.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
+import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 //index and points on ui
 const Map<int, int> _numbers = {
@@ -122,7 +122,9 @@ class Board extends StatelessWidget {
       minScale: 0.1,
       maxScale: 5,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         child: LayoutBuilder(builder: (context, constrants) {
           return Container(
             constraints: const BoxConstraints(maxWidth: 700),
@@ -138,8 +140,8 @@ class Board extends StatelessWidget {
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 10,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {

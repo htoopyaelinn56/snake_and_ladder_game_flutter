@@ -22,7 +22,8 @@ class BoardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDesktop = Utils.isDesktop(context);
     return Container(
-      color: color,
+      decoration: BoxDecoration(
+          color: color, border: Border.all(color: Colors.black, width: .5)),
       padding: const EdgeInsets.only(right: 5),
       child: Stack(
         children: [
@@ -31,7 +32,7 @@ class BoardCard extends StatelessWidget {
             child: Text(
               number,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.scrim,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
