@@ -72,7 +72,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
         // Position can't be null cause it's already larger than 100.
       }
 
-      if ((state.players[state.currentTurn]?.position ?? -1) >= 100) {
+      if ((state.players[state.currentTurn]?.position ?? -1) == 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
             ?.copyWith(win: true, position: 100);
       }
