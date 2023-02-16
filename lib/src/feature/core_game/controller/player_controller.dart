@@ -7,6 +7,19 @@ import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 import '../domain/player_model.dart';
 
+const Map<int, int> _snakeLadderPoints = {
+  12: 32,
+  15: 55,
+  21: 82,
+  22: 38,
+  54: 75,
+  69: 2,
+  76: 13,
+  87: 53,
+  91: 48,
+  98: 8,
+};
+
 class PlayerController extends StateNotifier<PlayerStateModel> {
   PlayerController()
       : super(
@@ -33,10 +46,22 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
   }
 
   void dice() async {
-    if (state.players[state.currentTurn]?.win == false) {
+    final currentTurn = state.currentTurn;
+    final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
+    if (state.players[currentTurn]?.win == false) {
       final number = math.Random().nextInt(6) + 1;
 
       await _moving(diceNumber: number);
+
+      // state.players[currentTurn] = state.players[currentTurn]?.copyWith(
+      //     position: _snakeLadderPoints[currentPlayerPosition] ??
+      //         currentPlayerPosition);
+
+      final snakeOrLadderPoition = _snakeLadderPoints[currentPlayerPosition];
+      if (snakeOrLadderPoition != null) {
+        state.players[currentTurn] = state.players[currentTurn]
+            ?.copyWith(position: snakeOrLadderPoition);
+      }
 
       if ((state.players[state.currentTurn]?.position ?? -1) >= 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
@@ -61,11 +86,11 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
 
   Future<void> _moving({required int diceNumber}) async {
     state = state.copyWith(isMoving: true);
-    for (int i = 0; i <= diceNumber; i++) {
+    final currentTurn = state.currentTurn;
+    for (int i = 0; i < diceNumber; i++) {
       await Future.delayed(const Duration(milliseconds: 100));
-      state.players[state.currentTurn] = state.players[state.currentTurn]
-          ?.copyWith(
-              position: (state.players[state.currentTurn]?.position ?? 1) + 1);
+      state.players[currentTurn] = state.players[state.currentTurn]
+          ?.copyWith(position: (state.players[currentTurn]?.position ?? 1) + 1);
       state = state.copyWith(players: state.players);
     }
     state = state.copyWith(isMoving: false);
