@@ -39,6 +39,15 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       state.players[state.currentTurn] =
           state.players[state.currentTurn]?.copyWith(position: newPosition);
 
+      // If dice roll results in a position larger than 100, extra numbers will be subtracted.
+      // This will results in longer and more interesting matches.
+      if ((state.players[state.currentTurn]?.position ?? -1) > 100) {
+        state.players[state.currentTurn] = state.players[state.currentTurn]
+            ?.copyWith(
+                position: 200 - (state.players[state.currentTurn]?.position)!);
+        // Position can't be null cause it's already larger than 100.
+      }
+
       if ((state.players[state.currentTurn]?.position ?? -1) >= 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
             ?.copyWith(win: true, position: 100);
