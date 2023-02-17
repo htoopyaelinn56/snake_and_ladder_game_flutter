@@ -57,27 +57,20 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       //     position: _snakeLadderPoints[currentPlayerPosition] ??
       //         currentPlayerPosition);
 
-      final snakeOrLadderPoition = _snakeLadderPoints[currentPlayerPosition];
-      if (snakeOrLadderPoition != null) {
+      final snakeOrLadderPosition = _snakeLadderPoints[currentPlayerPosition];
+      if (snakeOrLadderPosition != null) {
         state.players[currentTurn] = state.players[currentTurn]
-            ?.copyWith(position: snakeOrLadderPoition);
+            ?.copyWith(position: snakeOrLadderPosition);
       }
 
-      // If dice roll results in a position larger than 100, extra numbers will be subtracted.
-      // This will results in longer and more interesting matches.
-      if ((state.players[state.currentTurn]?.position ?? -1) > 100) {
-        state.players[state.currentTurn] = state.players[state.currentTurn]
-            ?.copyWith(
-                position: 200 - (state.players[state.currentTurn]?.position)!);
-        // Position can't be null cause it's already larger than 100.
-      }
-
+      // Checks if winning conditions are met
       if ((state.players[state.currentTurn]?.position ?? -1) == 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
             ?.copyWith(win: true, position: 100);
       }
     }
 
+    // Declares winnner when someone wins
     if (state.players[state.currentTurn]?.win == true) {
       Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins',
           width: 500);
@@ -93,14 +86,28 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     }
   }
 
+  //  Function for moving player avatars
   Future<void> _moving({required int diceNumber}) async {
     state = state.copyWith(isMoving: true);
     final currentTurn = state.currentTurn;
+    bool scoreLargerThan100 = false;
     for (int i = 0; i < diceNumber; i++) {
       await Future.delayed(const Duration(milliseconds: 100));
-      state.players[currentTurn] = state.players[state.currentTurn]
-          ?.copyWith(position: (state.players[currentTurn]?.position ?? 1) + 1);
+
+      // Moves backwards if score larger than 100
+      if (scoreLargerThan100) {
+        state.players[currentTurn] = state.players[state.currentTurn]?.copyWith(
+            position: (state.players[currentTurn]?.position ?? 1) - 1);
+      } else {
+        state.players[currentTurn] = state.players[state.currentTurn]?.copyWith(
+            position: (state.players[currentTurn]?.position ?? 1) + 1);
+      }
       state = state.copyWith(players: state.players);
+
+      // Activate toggle-switch if score is exceeding 100 and loop is not stopped yet
+      if (state.players[currentTurn]?.position == 100) {
+        scoreLargerThan100 = true;
+      }
     }
     state = state.copyWith(isMoving: false);
   }
