@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_and_ladder_game/src/common/common_button.dart';
+import 'package:flutter_snake_and_ladder_game/src/common/common_widgets/common_button.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/game.dart';
 

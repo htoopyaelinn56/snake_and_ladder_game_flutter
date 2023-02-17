@@ -9,6 +9,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    await DesktopWindow.setMinWindowSize(const Size(1200, 900));
     await DesktopWindow.setWindowSize(const Size(1200, 900));
   }
   runApp(
@@ -39,8 +40,7 @@ class MyApp extends StatelessWidget {
         child,
         defaultScale: true,
         breakpoints: const [
-          ResponsiveBreakpoint.resize(480, name: MOBILE),
-          ResponsiveBreakpoint.resize(750, name: TABLET),
+          ResponsiveBreakpoint.resize(650, name: MOBILE),
           ResponsiveBreakpoint.resize(1000, name: DESKTOP),
         ],
       ),

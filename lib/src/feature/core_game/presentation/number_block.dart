@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../utils.dart';
 
-class BoardCard extends StatelessWidget {
-  const BoardCard({
+class NumberBlock extends StatelessWidget {
+  const NumberBlock({
     super.key,
     required this.color,
     required this.number,

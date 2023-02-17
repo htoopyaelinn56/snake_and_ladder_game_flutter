@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/board.dart';
-import 'package:flutter_snake_and_ladder_game/src/common/common_button.dart';
+import 'package:flutter_snake_and_ladder_game/src/common/common_widgets/common_button.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -41,12 +41,7 @@ class Game extends StatelessWidget {
                 ResponsiveRowColumnItem(
                   child: OrientationBuilder(builder: (context, orientation) {
                     return SizedBox(
-                      width: isDesktop
-                          ? (Utils.isMobileDevice() &&
-                                  orientation == Orientation.landscape
-                              ? 100
-                              : 200)
-                          : null,
+                      width: isDesktop ? 200 : null,
                       child: Padding(
                         padding: EdgeInsets.only(
                             left: isDesktop ? 10 : 25, top: 10, right: 25),
@@ -54,7 +49,7 @@ class Game extends StatelessWidget {
                           final playerController =
                               ref.watch(playerControllerProvider);
                           return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               ListView.builder(
                                 itemBuilder: (context, index) {

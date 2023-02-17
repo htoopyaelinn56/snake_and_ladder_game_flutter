@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/board_card.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
+import '../../../common/my_assets.dart';
+import 'number_block.dart';
 
 //index and points on ui
 const Map<int, int> _numbers = {
@@ -116,51 +117,51 @@ class Board extends StatelessWidget {
     final isDesktop = Utils.isDesktop(context);
     final evenColor = Theme.of(context).colorScheme.primary.withOpacity(.5);
     final oddColor = Theme.of(context).colorScheme.primary.withOpacity(.3);
-    return InteractiveViewer(
-      panEnabled: !isDesktop,
-      scaleEnabled: !isDesktop,
-      minScale: 0.1,
-      maxScale: 5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: LayoutBuilder(builder: (context, constrants) {
-          return Container(
-            constraints: const BoxConstraints(maxWidth: 700),
-            child: ScrollConfiguration(
-              behavior:
-                  ScrollConfiguration.of(context).copyWith(scrollbars: false),
-              child: Consumer(builder: (context, ref, _) {
-                final playerList = ref.watch(playerControllerProvider).players;
-                return GridView.builder(
-                  physics: isDesktop
-                      ? const ClampingScrollPhysics()
-                      : const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 10,
-                    crossAxisSpacing: 0,
-                    mainAxisSpacing: 0,
-                    childAspectRatio: 1,
-                  ),
-                  itemBuilder: (context, index) {
-                    return BoardCard(
-                      player1IsAt: _numbers[index] == playerList[0]?.position,
-                      player2IsAt: _numbers[index] == playerList[1]?.position,
-                      player3IsAt: _numbers[index] == playerList[2]?.position,
-                      player4IsAt: _numbers[index] == playerList[3]?.position,
-                      color: _numbers[index]!.isEven ? evenColor : oddColor,
-                      number: _numbers[index].toString(),
-                    );
-                  },
-                  itemCount: _numbers.length,
-                );
-              }),
-            ),
-          );
-        }),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
       ),
+      child: LayoutBuilder(builder: (context, constrants) {
+        return Container(
+          constraints: const BoxConstraints(maxWidth: 700),
+          child: ScrollConfiguration(
+            behavior:
+                ScrollConfiguration.of(context).copyWith(scrollbars: false),
+            child: Stack(
+              children: [
+                Consumer(builder: (context, ref, _) {
+                  final playerList =
+                      ref.watch(playerControllerProvider).players;
+                  return GridView.builder(
+                    physics: isDesktop
+                        ? const ClampingScrollPhysics()
+                        : const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 10,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0,
+                      childAspectRatio: 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      return NumberBlock(
+                        player1IsAt: _numbers[index] == playerList[0]?.position,
+                        player2IsAt: _numbers[index] == playerList[1]?.position,
+                        player3IsAt: _numbers[index] == playerList[2]?.position,
+                        player4IsAt: _numbers[index] == playerList[3]?.position,
+                        color: _numbers[index]!.isEven ? evenColor : oddColor,
+                        number: _numbers[index].toString(),
+                      );
+                    },
+                    itemCount: _numbers.length,
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

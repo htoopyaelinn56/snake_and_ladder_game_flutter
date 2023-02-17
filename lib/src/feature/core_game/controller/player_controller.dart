@@ -53,23 +53,16 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
 
       await _moving(diceNumber: number);
 
-      // state.players[currentTurn] = state.players[currentTurn]?.copyWith(
-      //     position: _snakeLadderPoints[currentPlayerPosition] ??
-      //         currentPlayerPosition);
-
       // Checks if winning conditions are met
       if (currentPlayerPosition == 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
             ?.copyWith(win: true, position: 100);
+        // Declares winnner when someone wins
+        Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins',
+            width: 500);
+        state = state.copyWith(players: state.players, someoneWins: true);
+        return;
       }
-    }
-
-    // Declares winnner when someone wins
-    if (state.players[state.currentTurn]?.win == true) {
-      Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins',
-          width: 500);
-      state = state.copyWith(players: state.players, someoneWins: true);
-      return;
     }
 
     state = state.copyWith(
