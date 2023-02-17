@@ -102,8 +102,6 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       }
       state = state.copyWith(players: state.players);
 
-      print(currentPlayerPosition);
-
       // Activate toggle-switch if score is exceeding 100 and loop is not stopped yet
       // We can't use currentPlayerPosition here since we need the recently updated value
       // And currentPlayerPosition value is updated only when the loop is re/started
