@@ -57,14 +57,8 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       //     position: _snakeLadderPoints[currentPlayerPosition] ??
       //         currentPlayerPosition);
 
-      final snakeOrLadderPosition = _snakeLadderPoints[currentPlayerPosition];
-      if (snakeOrLadderPosition != null) {
-        state.players[currentTurn] = state.players[currentTurn]
-            ?.copyWith(position: snakeOrLadderPosition);
-      }
-
       // Checks if winning conditions are met
-      if ((state.players[state.currentTurn]?.position ?? -1) == 100) {
+      if (currentPlayerPosition == 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
             ?.copyWith(win: true, position: 100);
       }
@@ -90,24 +84,42 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
   Future<void> _moving({required int diceNumber}) async {
     state = state.copyWith(isMoving: true);
     final currentTurn = state.currentTurn;
-    bool scoreLargerThan100 = false;
+    bool scoreLargerThan100 =
+        false; // Toggle switch for moving backwards when score > 100
+
     for (int i = 0; i < diceNumber; i++) {
       await Future.delayed(const Duration(milliseconds: 100));
 
+      final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
+
       // Moves backwards if score larger than 100
       if (scoreLargerThan100) {
-        state.players[currentTurn] = state.players[state.currentTurn]?.copyWith(
-            position: (state.players[currentTurn]?.position ?? 1) - 1);
+        state.players[currentTurn] = state.players[state.currentTurn]
+            ?.copyWith(position: currentPlayerPosition - 1);
       } else {
-        state.players[currentTurn] = state.players[state.currentTurn]?.copyWith(
-            position: (state.players[currentTurn]?.position ?? 1) + 1);
+        state.players[currentTurn] = state.players[state.currentTurn]
+            ?.copyWith(position: currentPlayerPosition + 1);
       }
       state = state.copyWith(players: state.players);
 
+      print(currentPlayerPosition);
+
       // Activate toggle-switch if score is exceeding 100 and loop is not stopped yet
+      // We can't use currentPlayerPosition here since we need the recently updated value
+      // And currentPlayerPosition value is updated only when the loop is re/started
       if (state.players[currentTurn]?.position == 100) {
         scoreLargerThan100 = true;
       }
+    }
+
+    //  Moves player to endpoint of the snake or ladder
+    final currentPlayerRestingPosition =
+        state.players[currentTurn]?.position ?? 1;
+    final snakeOrLadderPosition =
+        _snakeLadderPoints[currentPlayerRestingPosition];
+    if (snakeOrLadderPosition != null) {
+      state.players[currentTurn] =
+          state.players[currentTurn]?.copyWith(position: snakeOrLadderPosition);
     }
     state = state.copyWith(isMoving: false);
   }
