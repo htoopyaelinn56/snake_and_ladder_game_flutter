@@ -13,6 +13,8 @@ const Map<int, int> _snakeLadderPoints = {
   21: 82,
   22: 38,
   54: 75,
+  52: 75,
+  37: 19,
   69: 2,
   76: 13,
   87: 53,

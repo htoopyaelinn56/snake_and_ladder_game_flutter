@@ -54,6 +54,7 @@ class Game extends StatelessWidget {
                               ListView.builder(
                                 itemBuilder: (context, index) {
                                   return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [

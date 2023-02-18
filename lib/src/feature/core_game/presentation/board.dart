@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
+import 'dart:math' as math show pi;
 import '../../../common/my_assets.dart';
 import 'number_block.dart';
 
@@ -112,9 +113,14 @@ const Map<int, int> _numbers = {
 class Board extends StatelessWidget {
   const Board({super.key});
 
+  double _degreeToRadian(double degree) => (math.pi / 180) * degree;
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = Utils.isDesktop(context);
+
+    final size = MediaQuery.of(context).size;
+    final desktopSize = size.width >= 650;
     final evenColor = Theme.of(context).colorScheme.primary.withOpacity(.5);
     final oddColor = Theme.of(context).colorScheme.primary.withOpacity(.3);
     return Padding(
@@ -123,40 +129,161 @@ class Board extends StatelessWidget {
       ),
       child: LayoutBuilder(builder: (context, constrants) {
         return Container(
-          constraints: const BoxConstraints(maxWidth: 700),
+          constraints: const BoxConstraints(maxWidth: 650),
           child: ScrollConfiguration(
             behavior:
                 ScrollConfiguration.of(context).copyWith(scrollbars: false),
             child: Stack(
               children: [
-                Consumer(builder: (context, ref, _) {
-                  final playerList =
-                      ref.watch(playerControllerProvider).players;
-                  return GridView.builder(
-                    physics: isDesktop
-                        ? const ClampingScrollPhysics()
-                        : const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 10,
-                      crossAxisSpacing: 0,
-                      mainAxisSpacing: 0,
-                      childAspectRatio: 1,
+                Padding(
+                  padding: EdgeInsets.only(top: isDesktop ? 0 : 10),
+                  child: Consumer(builder: (context, ref, _) {
+                    final playerList =
+                        ref.watch(playerControllerProvider).players;
+                    return GridView.builder(
+                      physics: isDesktop
+                          ? const ClampingScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10,
+                        crossAxisSpacing: 0,
+                        mainAxisSpacing: 0,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        return NumberBlock(
+                          player1IsAt:
+                              _numbers[index] == playerList[0]?.position,
+                          player2IsAt:
+                              _numbers[index] == playerList[1]?.position,
+                          player3IsAt:
+                              _numbers[index] == playerList[2]?.position,
+                          player4IsAt:
+                              _numbers[index] == playerList[3]?.position,
+                          color: _numbers[index]!.isEven ? evenColor : oddColor,
+                          number: _numbers[index].toString(),
+                        );
+                      },
+                      itemCount: _numbers.length,
+                    );
+                  }),
+                ),
+                Positioned(
+                  top: desktopSize ? 90 : 80,
+                  left: 10,
+                  child: Image.asset(
+                    MyAssets.orangeLadder,
+                    height: desktopSize ? null : 250,
+                  ),
+                ),
+                Positioned(
+                  bottom: desktopSize ? 130 : 80,
+                  left: desktopSize ? 120 : 75,
+                  child: Transform.rotate(
+                    angle: _degreeToRadian(45),
+                    child: Image.asset(
+                      MyAssets.redLadder,
+                      height: desktopSize ? 130 : 80,
                     ),
-                    itemBuilder: (context, index) {
-                      return NumberBlock(
-                        player1IsAt: _numbers[index] == playerList[0]?.position,
-                        player2IsAt: _numbers[index] == playerList[1]?.position,
-                        player3IsAt: _numbers[index] == playerList[2]?.position,
-                        player4IsAt: _numbers[index] == playerList[3]?.position,
-                        color: _numbers[index]!.isEven ? evenColor : oddColor,
-                        number: _numbers[index].toString(),
-                      );
-                    },
-                    itemCount: _numbers.length,
-                  );
-                }),
+                  ),
+                ),
+                Positioned(
+                  left: desktopSize ? 320 : 200,
+                  bottom: desktopSize ? 80 : 45,
+                  child: Transform.rotate(
+                    angle: _degreeToRadian(5),
+                    child: Image.asset(
+                      MyAssets.blueLadder,
+                      height: desktopSize ? null : 180,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: desktopSize ? 80 : 45,
+                  bottom: desktopSize ? 80 : 50,
+                  child: Transform.rotate(
+                    angle: _degreeToRadian(-5),
+                    child: Image.asset(
+                      MyAssets.redLadder,
+                      height: desktopSize ? null : 95,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: desktopSize ? 380 : 240,
+                  top: desktopSize ? 160 : 115,
+                  child: Transform.rotate(
+                    angle: _degreeToRadian(-30),
+                    child: Image.asset(
+                      MyAssets.redLadder,
+                      height: desktopSize ? null : 85,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: desktopSize ? 160 : 110,
+                  top: desktopSize ? 100 : 80,
+                  child: Transform.rotate(
+                    angle: _degreeToRadian(-50),
+                    child: Image.asset(
+                      MyAssets.blueLadder,
+                      height: desktopSize ? 260 : 150,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: desktopSize ? -15 : 0,
+                  left: desktopSize ? 30 : 10,
+                  child: Image.asset(
+                    MyAssets.brownSnake,
+                    height: desktopSize ? 780 : 500,
+                  ),
+                ),
+                Positioned(
+                  top: desktopSize ? 140 : 110,
+                  left: desktopSize ? 260 : 165,
+                  child: Image.asset(
+                    MyAssets.redSnake,
+                    height: desktopSize ? null : 260,
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  right: desktopSize ? 30 : 15,
+                  child: Image.asset(
+                    MyAssets.cyanSnake,
+                    height: desktopSize ? null : 220,
+                  ),
+                ),
+                Positioned(
+                  top: desktopSize ? 200 : 145,
+                  right: desktopSize ? 80 : 60,
+                  child: Image.asset(
+                    MyAssets.purpleSnake,
+                    height: desktopSize ? null : 270,
+                  ),
+                ),
+                Positioned(
+                  right: desktopSize ? 140 : 100,
+                  top: desktopSize ? 100 : 75,
+                  child: Image.asset(
+                    MyAssets.blackSnake,
+                    height: desktopSize ? null : 120,
+                  ),
+                ),
+                Positioned(
+                  left: desktopSize ? 100 : 70,
+                  bottom: desktopSize ? 55 : 40,
+                  child: Transform.rotate(
+                    angle: _degreeToRadian(65),
+                    child: Image.asset(
+                      MyAssets.blackSnake,
+                      height: desktopSize ? null : 120,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
