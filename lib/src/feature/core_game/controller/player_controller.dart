@@ -97,7 +97,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       }
       state = state.copyWith(players: state.players);
 
-      // Activate toggle-switch if score is exceeding 100 and loop is not stopped yet
+      // Activate toggle-switch if score is exceeding 100 and loop has not stopped yet
       // We can't use currentPlayerPosition here since we need the recently updated value
       // And currentPlayerPosition value is updated only when the loop is re/started
       if (state.players[currentTurn]?.position == 100) {
@@ -106,10 +106,8 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     }
 
     //  Moves player to endpoint of the snake or ladder
-    final currentPlayerRestingPosition =
-        state.players[currentTurn]?.position ?? 1;
     final snakeOrLadderPosition =
-        _snakeLadderPoints[currentPlayerRestingPosition];
+        _snakeLadderPoints[state.players[currentTurn]?.position ?? 1];
     if (snakeOrLadderPosition != null) {
       state.players[currentTurn] =
           state.players[currentTurn]?.copyWith(position: snakeOrLadderPosition);
