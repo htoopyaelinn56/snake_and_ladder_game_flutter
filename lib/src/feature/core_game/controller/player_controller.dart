@@ -41,7 +41,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
           ),
         );
 
-  static const _animationDuartion = Duration(milliseconds: 100);
+  static const _animationDuartion = Duration(milliseconds: 150);
 
   void setPlayer({required int playerCount}) {
     for (int i = 1; i < playerCount; i++) {
