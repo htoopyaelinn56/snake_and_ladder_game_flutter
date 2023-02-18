@@ -7,19 +7,20 @@ import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 import '../domain/player_model.dart';
 
-const Map<int, int> _snakeLadderPoints = {
-  12: 32,
-  15: 55,
-  21: 82,
-  22: 38,
-  54: 75,
-  52: 75,
-  37: 19,
-  69: 2,
-  76: 13,
-  87: 53,
-  91: 48,
-  98: 8,
+//points to animate
+const Map<int, List<int>> _snakeLadderPoints = {
+  12: [29, 32],
+  15: [26, 35, 46, 55],
+  21: [40, 42, 59, 62, 79, 82],
+  22: [38],
+  54: [67, 75],
+  52: [68, 67, 75],
+  37: [24, 23, 22, 19],
+  69: [53, 47, 34, 26, 16, 4, 3, 2],
+  76: [65, 56, 46, 35, 26, 14, 13],
+  87: [73, 67, 53],
+  91: [89, 72, 69, 52, 49, 48],
+  98: [84, 77, 64, 58, 43, 38, 23, 18, 3, 4, 5, 6, 7, 8],
 };
 
 class PlayerController extends StateNotifier<PlayerStateModel> {
@@ -36,9 +37,11 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ],
             currentTurn: 0,
             totalPlayers: 1, someoneWins: false,
-            isMoving: false,
+            isMoving: false, diceNumber: -1,
           ),
         );
+
+  static const _animationDuartion = Duration(milliseconds: 100);
 
   void setPlayer({required int playerCount}) {
     for (int i = 1; i < playerCount; i++) {
@@ -49,12 +52,12 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
 
   void dice() async {
     final currentTurn = state.currentTurn;
-    final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
+
     if (state.players[currentTurn]?.win == false) {
       final number = math.Random().nextInt(6) + 1;
 
       await _moving(diceNumber: number);
-
+      final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
       // Checks if winning conditions are met
       if (currentPlayerPosition == 100) {
         state.players[state.currentTurn] = state.players[state.currentTurn]
@@ -83,7 +86,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
         false; // Toggle switch for moving backwards when score > 100
 
     for (int i = 0; i < diceNumber; i++) {
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(_animationDuartion);
 
       final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
 
@@ -109,8 +112,13 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     final snakeOrLadderPosition =
         _snakeLadderPoints[state.players[currentTurn]?.position ?? 1];
     if (snakeOrLadderPosition != null) {
-      state.players[currentTurn] =
-          state.players[currentTurn]?.copyWith(position: snakeOrLadderPosition);
+      for (int i = 0; i < snakeOrLadderPosition.length; i++) {
+        await Future.delayed(_animationDuartion);
+        state.players[currentTurn] = state.players[currentTurn]?.copyWith(
+          position: snakeOrLadderPosition[i],
+        );
+        state = state.copyWith(players: state.players);
+      }
     }
     state = state.copyWith(isMoving: false);
   }
