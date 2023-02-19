@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
-import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/widgets/player_circle.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 import 'dart:math' as math show pi;
 import '../../../common/my_assets.dart';
@@ -138,26 +137,38 @@ class Board extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: isDesktop ? 0 : 10),
-                  child: GridView.builder(
-                    physics: isDesktop
-                        ? const ClampingScrollPhysics()
-                        : const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 10,
-                      crossAxisSpacing: 0,
-                      mainAxisSpacing: 0,
-                      childAspectRatio: 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      return NumberBlock(
-                        color: _numbers[index]!.isEven ? evenColor : oddColor,
-                        number: _numbers[index].toString(),
-                      );
-                    },
-                    itemCount: _numbers.length,
-                  ),
+                  child: Consumer(builder: (context, ref, _) {
+                    final playerList =
+                        ref.watch(playerControllerProvider).players;
+                    return GridView.builder(
+                      physics: isDesktop
+                          ? const ClampingScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10,
+                        crossAxisSpacing: 0,
+                        mainAxisSpacing: 0,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        return NumberBlock(
+                          player1IsAt:
+                              _numbers[index] == playerList[0]?.position,
+                          player2IsAt:
+                              _numbers[index] == playerList[1]?.position,
+                          player3IsAt:
+                              _numbers[index] == playerList[2]?.position,
+                          player4IsAt:
+                              _numbers[index] == playerList[3]?.position,
+                          color: _numbers[index]!.isEven ? evenColor : oddColor,
+                          number: _numbers[index].toString(),
+                        );
+                      },
+                      itemCount: _numbers.length,
+                    );
+                  }),
                 ),
                 Positioned(
                   top: desktopSize ? 90 : 80,
@@ -273,52 +284,6 @@ class Board extends StatelessWidget {
                     ),
                   ),
                 ),
-                Consumer(builder: (context, ref, _) {
-                  final playerList =
-                      ref.watch(playerControllerProvider).players;
-                  return Positioned.fill(
-                    child: Stack(
-                      children: [
-                        if (playerList[0]?.position != null)
-                          Positioned(
-                            left: 5 + ((desktopSize ? 65 : 40) * 0),
-                            bottom: 5 + ((desktopSize ? 65 : 40) * 8),
-                            child: const PlayerCircle(
-                              color: Colors.purple,
-                            ),
-                          ),
-                        if (playerList[1]?.position != null)
-                          Positioned(
-                            left: (desktopSize ? 30 : 15) +
-                                ((desktopSize ? 65 : 40) * 0),
-                            bottom: 5 + ((desktopSize ? 65 : 40) * 0),
-                            child: const PlayerCircle(
-                              color: Colors.pink,
-                            ),
-                          ),
-                        if (playerList[2]?.position != null)
-                          Positioned(
-                            left: 5 + ((desktopSize ? 65 : 40) * 0),
-                            bottom: (desktopSize ? 30 : 15) +
-                                ((desktopSize ? 65 : 40) * 0),
-                            child: const PlayerCircle(
-                              color: Colors.greenAccent,
-                            ),
-                          ),
-                        if (playerList[3]?.position != null)
-                          Positioned(
-                            left: (desktopSize ? 30 : 15) +
-                                ((desktopSize ? 65 : 40) * 0),
-                            bottom: (desktopSize ? 30 : 15) +
-                                ((desktopSize ? 65 : 40) * 0),
-                            child: const PlayerCircle(
-                              color: Colors.cyanAccent,
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
-                }),
               ],
             ),
           ),
