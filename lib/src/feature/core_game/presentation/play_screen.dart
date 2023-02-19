@@ -53,8 +53,8 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
             const SizedBox(height: 15),
             CommonButton(
               onSubmit: () {
-                ref.read(playerControllerProvider.notifier).setPlayer(
-                    playerCount: _PlayerType.values.indexOf(type) + 2);
+                // ref.read(playerControllerProvider.notifier).setPlayer(
+                //     playerCount: _PlayerType.values.indexOf(type) + 2);
                 Utils.pagePusher(
                     context: context,
                     page: const Game(),
