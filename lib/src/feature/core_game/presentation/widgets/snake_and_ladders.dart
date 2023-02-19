@@ -12,7 +12,7 @@ class SnakeAndLadders extends StatefulWidget {
 }
 
 class _SnakeAndLaddersState extends State<SnakeAndLadders> {
-  double initialPosition = -300;
+  double initialPosition = -500;
   bool initialState = true;
 
   @override

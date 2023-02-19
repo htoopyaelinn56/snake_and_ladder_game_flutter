@@ -56,9 +56,10 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
                 ref.read(playerControllerProvider.notifier).setPlayer(
                     playerCount: _PlayerType.values.indexOf(type) + 2);
                 Utils.pagePusher(
-                    context: context,
-                    page: const Game(),
-                    removeBackStack: true);
+                  context: context,
+                  page: const Game(),
+                  removeBackStack: true,
+                );
               },
               child: const Text('Play'),
             ),
