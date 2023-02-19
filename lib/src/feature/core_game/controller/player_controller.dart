@@ -54,7 +54,9 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     final currentTurn = state.currentTurn;
 
     if (state.players[currentTurn]?.win == false) {
-      await _moving();
+      final number = math.Random().nextInt(6) + 1;
+
+      await _moving(diceNumber: number);
       final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
       // Checks if winning conditions are met
       if (currentPlayerPosition == 100) {
@@ -77,9 +79,8 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
   }
 
   //  Function for moving player avatars
-  Future<void> _moving() async {
-    final diceNumber = math.Random().nextInt(6) + 1;
-    state = state.copyWith(isMoving: true, diceNumber: diceNumber);
+  Future<void> _moving({required int diceNumber}) async {
+    state = state.copyWith(isMoving: true);
     final currentTurn = state.currentTurn;
     bool scoreLargerThan100 =
         false; // Toggle switch for moving backwards when score > 100
