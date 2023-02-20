@@ -35,7 +35,7 @@ class PlayerStateModel extends Equatable {
       totalPlayers: totalPlayers ?? this.totalPlayers,
       someoneWins: someoneWins ?? this.someoneWins,
       isMoving: isMoving ?? this.isMoving,
-      diceNumber: diceNumber ?? this.diceNumber,
+      diceNumber: diceNumber ?? 0,
     );
   }
 
