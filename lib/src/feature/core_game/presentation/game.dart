@@ -82,7 +82,7 @@ class Game extends StatelessWidget {
                               ),
                               const Divider(),
                               Text(
-                                  'Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
+                                  'Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn, Dice Number :${ref.watch(playerControllerProvider).diceNumber}'),
                               const SizedBox(height: 5),
                               CommonButton(
                                 width: 90,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/widgets/player_circle.dart';
 
 import '../../../utils.dart';
 
@@ -42,7 +43,7 @@ class NumberBlock extends StatelessWidget {
             const Positioned(
               left: 5,
               bottom: 5,
-              child: _PlayerCircle(
+              child: PlayerCircle(
                 color: Colors.purple,
               ),
             ),
@@ -50,7 +51,7 @@ class NumberBlock extends StatelessWidget {
             Positioned(
               left: isDesktop ? 25 : 15,
               bottom: 5,
-              child: const _PlayerCircle(
+              child: const PlayerCircle(
                 color: Colors.pink,
               ),
             ),
@@ -58,7 +59,7 @@ class NumberBlock extends StatelessWidget {
             Positioned(
               left: 5,
               bottom: isDesktop ? 25 : 15,
-              child: const _PlayerCircle(
+              child: const PlayerCircle(
                 color: Colors.greenAccent,
               ),
             ),
@@ -66,28 +67,11 @@ class NumberBlock extends StatelessWidget {
             Positioned(
               left: isDesktop ? 25 : 15,
               bottom: isDesktop ? 25 : 15,
-              child: const _PlayerCircle(
+              child: const PlayerCircle(
                 color: Colors.cyanAccent,
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _PlayerCircle extends StatelessWidget {
-  const _PlayerCircle({required this.color});
-  final Color color;
-  @override
-  Widget build(BuildContext context) {
-    final isDesktop = Utils.isDesktop(context);
-    return Material(
-      color: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 3,
-      child: Padding(
-        padding: EdgeInsets.all(isDesktop ? 10 : 5),
       ),
     );
   }
