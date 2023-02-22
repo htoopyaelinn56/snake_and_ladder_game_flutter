@@ -37,7 +37,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ],
             currentTurn: 0,
             totalPlayers: 1, someoneWins: false,
-            isMoving: false, diceNumber: -1,
+            isMoving: false, diceNumber: 0,
           ),
         );
 
