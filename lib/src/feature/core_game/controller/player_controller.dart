@@ -37,7 +37,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ],
             currentTurn: 0,
             totalPlayers: 1, someoneWins: false,
-            isMoving: false, diceNumber: 0,
+            isMoving: false, diceNumber: math.Random().nextInt(6) + 1,
           ),
         );
 
@@ -62,7 +62,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             ?.copyWith(win: true, position: 100);
         // Declares winnner when someone wins
         Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins',
-            width: 500);
+            width: Utils.isMobileDevice() ? null : 500);
         state = state.copyWith(players: state.players, someoneWins: true);
         return;
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/board.dart';
-import 'package:flutter_snake_and_ladder_game/src/common/common_widgets/common_button.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/widgets/dice_roll_widget.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -48,6 +48,7 @@ class Game extends StatelessWidget {
                         child: Consumer(builder: (context, ref, _) {
                           final playerController =
                               ref.watch(playerControllerProvider);
+
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -82,21 +83,10 @@ class Game extends StatelessWidget {
                               ),
                               const Divider(),
                               Text(
-                                  'Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn\nDice Number : ${ref.watch(playerControllerProvider).diceNumber}'),
+                                  'Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
                               const SizedBox(height: 5),
-                              CommonButton(
-                                width: 90,
-                                onSubmit: playerController.someoneWins ||
-                                        playerController.isMoving
-                                    ? null
-                                    : () {
-                                        ref
-                                            .read(playerControllerProvider
-                                                .notifier)
-                                            .dice();
-                                      },
-                                child: const Text('Dice'),
-                              ),
+                              const DiceRollWidget(),
+                              const SizedBox(height: 5),
                             ],
                           );
                         }),

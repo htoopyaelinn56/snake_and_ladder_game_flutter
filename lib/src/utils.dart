@@ -26,7 +26,7 @@ class Utils {
   }
 
   static Future<void> showCommonSnackBar(String text,
-      {Color? bgColor, double width = 500}) async {
+      {Color? bgColor, double? width = 500}) async {
     ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
       SnackBar(
         width: width,

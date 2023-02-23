@@ -45,6 +45,7 @@ class _SnakeAndLaddersState extends State<SnakeAndLadders> {
             child: Image.asset(
               MyAssets.orangeLadder,
               height: desktopSize ? null : 250,
+              isAntiAlias: true,
             ),
           ),
           AnimatedPositioned(

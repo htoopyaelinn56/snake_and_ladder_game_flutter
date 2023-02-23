@@ -115,7 +115,6 @@ class Board extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = Utils.isDesktop(context);
-    final size = MediaQuery.of(context).size;
     final evenColor = Theme.of(context).colorScheme.primary.withOpacity(.5);
     final oddColor = Theme.of(context).colorScheme.primary.withOpacity(.3);
     return Padding(
