@@ -105,6 +105,7 @@ class _SnakeAndLaddersState extends State<SnakeAndLadders> {
               child: Image.asset(
                 MyAssets.blueLadder,
                 height: desktopSize ? 260 : 150,
+                color: Colors.deepPurple,
               ),
             ),
           ),

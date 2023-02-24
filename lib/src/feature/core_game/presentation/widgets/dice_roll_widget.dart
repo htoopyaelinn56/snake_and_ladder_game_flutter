@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,11 +27,13 @@ class _DiceRollWidgetState extends ConsumerState<DiceRollWidget>
     final playerController = ref.watch(playerControllerProvider);
     return InkWell(
       borderRadius: BorderRadius.circular(5),
-      onTap: playerController.someoneWins || playerController.isMoving
+      onTap: playerController.someoneWins ||
+              playerController.isMoving ||
+              animationController.isAnimating
           ? null
           : () async {
+              animationController.value = 0;
               animationController.forward().then((value) {
-                animationController.value = 0;
                 ref.read(playerControllerProvider.notifier).dice();
               });
             },

@@ -110,13 +110,11 @@ const Map<int, int> _numbers = {
 };
 
 class Board extends StatelessWidget {
-  const Board({super.key});
-
+  const Board({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
-    final isDesktop = Utils.isDesktop(context);
-    final evenColor = Theme.of(context).colorScheme.primary.withOpacity(.5);
-    final oddColor = Theme.of(context).colorScheme.primary.withOpacity(.3);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -128,46 +126,54 @@ class Board extends StatelessWidget {
             behavior:
                 ScrollConfiguration.of(context).copyWith(scrollbars: false),
             child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: isDesktop ? 0 : 10),
-                  child: Consumer(builder: (context, ref, _) {
-                    final playerList =
-                        ref.watch(playerControllerProvider).players;
-                    return GridView.builder(
-                      physics: isDesktop
-                          ? const ClampingScrollPhysics()
-                          : const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 10,
-                        crossAxisSpacing: 0,
-                        mainAxisSpacing: 0,
-                        childAspectRatio: 1,
-                      ),
-                      itemBuilder: (context, index) {
-                        return NumberBlock(
-                          player1IsAt:
-                              _numbers[index] == playerList[0]?.position,
-                          player2IsAt:
-                              _numbers[index] == playerList[1]?.position,
-                          player3IsAt:
-                              _numbers[index] == playerList[2]?.position,
-                          player4IsAt:
-                              _numbers[index] == playerList[3]?.position,
-                          color: _numbers[index]!.isEven ? evenColor : oddColor,
-                          number: _numbers[index].toString(),
-                        );
-                      },
-                      itemCount: _numbers.length,
-                    );
-                  }),
-                ),
-                const SnakeAndLadders(),
+              children: const [
+                _BoardGridView(onlyPlayers: false),
+                SnakeAndLadders(),
+                _BoardGridView(onlyPlayers: true),
               ],
             ),
           ),
+        );
+      }),
+    );
+  }
+}
+
+class _BoardGridView extends StatelessWidget {
+  const _BoardGridView({required this.onlyPlayers});
+  final bool onlyPlayers;
+  @override
+  Widget build(BuildContext context) {
+    final isDesktop = Utils.isDesktop(context);
+    final evenColor = Theme.of(context).colorScheme.primary.withOpacity(.5);
+    final oddColor = Theme.of(context).colorScheme.primary.withOpacity(.3);
+    return Padding(
+      padding: EdgeInsets.only(top: isDesktop ? 0 : 10),
+      child: Consumer(builder: (context, ref, _) {
+        final playerList = ref.watch(playerControllerProvider).players;
+        return GridView.builder(
+          physics: isDesktop
+              ? const ClampingScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 10,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            return NumberBlock(
+              player1IsAt: _numbers[index] == playerList[0]?.position,
+              player2IsAt: _numbers[index] == playerList[1]?.position,
+              player3IsAt: _numbers[index] == playerList[2]?.position,
+              player4IsAt: _numbers[index] == playerList[3]?.position,
+              color: _numbers[index]!.isEven ? evenColor : oddColor,
+              number: _numbers[index].toString(),
+              onlyPlayers: onlyPlayers,
+            );
+          },
+          itemCount: _numbers.length,
         );
       }),
     );
