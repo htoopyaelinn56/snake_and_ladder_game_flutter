@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/common/common_widgets/common_button.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/game.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/lobby_screen.dart';
 
 import '../../../utils.dart';
 
@@ -62,6 +63,13 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
                 );
               },
               child: const Text('Play'),
+            ),
+            const SizedBox(height: 20),
+            CommonButton(
+              onSubmit: () {
+                Utils.pagePusher(context: context, page: const LobbyScreen());
+              },
+              child: const Text('Play Multiplayer'),
             ),
           ],
         ),

@@ -116,7 +116,7 @@ class Dice extends StatelessWidget {
 }
 
 class _Dots extends StatelessWidget {
-  const _Dots({super.key});
+  const _Dots();
 
   @override
   Widget build(BuildContext context) {

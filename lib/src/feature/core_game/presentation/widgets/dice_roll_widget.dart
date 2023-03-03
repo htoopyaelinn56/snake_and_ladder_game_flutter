@@ -29,7 +29,7 @@ class _DiceRollWidgetState extends ConsumerState<DiceRollWidget>
       borderRadius: BorderRadius.circular(5),
       onTap: playerController.someoneWins ||
               playerController.isMoving ||
-              animationController.isAnimating
+              animationController.isAnimating 
           ? null
           : () async {
               animationController.value = 0;
@@ -45,8 +45,7 @@ class _DiceRollWidgetState extends ConsumerState<DiceRollWidget>
             duration: 1.seconds,
             hz: 5,
             rotation: .15,
-          )
-          .shimmer(),
+          ),
     );
   }
 }
