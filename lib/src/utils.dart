@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_snake_and_ladder_game/src/constants.dart';
 
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'dart:io' show Platform;
@@ -33,5 +34,9 @@ class Utils {
         backgroundColor: Theme.of(navigatorKey.currentContext!).colorScheme.primaryContainer,
       ),
     );
+  }
+
+  static getWebsocketHostUrl({required bool isLocal}) {
+    return isMobileDevice() ? 'ws://192.168.100.36:3000' : kWsUrl;
   }
 }

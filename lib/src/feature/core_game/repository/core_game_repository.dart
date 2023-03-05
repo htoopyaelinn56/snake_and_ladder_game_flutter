@@ -6,13 +6,16 @@ import '../../../constants.dart';
 import '../../../utils.dart';
 import '../domain/lobby_player_response.dart';
 
-final listenLobbySocketProvider = StreamProvider.autoDispose<LobbyPlayerResponse>((ref) async* {
-  final wsUrl = Uri.parse(Utils.isMobileDevice() ? 'ws://192.168.100.36:3000/lobby' : '$kWsUrl/lobby');
-  var channel = WebSocketChannel.connect(wsUrl);
+final webSocketProvider = Provider.autoDispose<WebSocketChannel>((ref) {
+  final wsUrl = Uri.parse(Utils.isMobileDevice() ? '${Utils.getWebsocketHostUrl(isLocal: true)}/lobby' : '$kWsUrl/lobby');
+  final channel = WebSocketChannel.connect(wsUrl);
+  ref.onDispose(() => channel.sink.close());
+  return channel;
+});
 
-  ref.onDispose(() {
-    channel.sink.close();
-  });
+final listenLobbySocketProvider = StreamProvider.autoDispose<LobbyPlayerResponse>((ref) async* {
+  final channel = ref.watch(webSocketProvider);
+  ref.onDispose(() => channel.sink.close());
 
   await for (final i in channel.stream.asBroadcastStream()) {
     yield LobbyPlayerResponse.fromJson(jsonDecode(i));

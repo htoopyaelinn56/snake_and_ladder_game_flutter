@@ -35,52 +35,54 @@ class Game extends StatelessWidget {
                   child: Board(),
                 ),
                 ResponsiveRowColumnItem(
-                  child: OrientationBuilder(builder: (context, orientation) {
-                    return SizedBox(
-                      width: isDesktop ? 200 : null,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: isDesktop ? 10 : 25, top: 10, right: 25),
-                        child: Consumer(builder: (context, ref, _) {
-                          final playerController = ref.watch(playerControllerProvider);
+                  child: OrientationBuilder(
+                    builder: (context, orientation) {
+                      return SizedBox(
+                        width: isDesktop ? 200 : null,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: isDesktop ? 10 : 25, top: 10, right: 25),
+                          child: Consumer(builder: (context, ref, _) {
+                            final playerController = ref.watch(playerControllerProvider);
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 3),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: playerColors[index],
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(top: 3),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: playerColors[index],
+                                          ),
+                                          padding: const EdgeInsets.all(5),
                                         ),
-                                        padding: const EdgeInsets.all(5),
-                                      ),
-                                      const SizedBox(width: 3),
-                                      Text(
-                                        '${orientation == Orientation.landscape && Utils.isMobileDevice() ? 'P' : 'Player'} ${index + 1} - ${playerController.players[index]?.position ?? 0} ',
-                                      ),
-                                    ],
-                                  );
-                                },
-                                shrinkWrap: true,
-                                itemCount: playerController.players.where((element) => element?.position != null).toList().length,
-                              ),
-                              const Divider(),
-                              Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
-                              const SizedBox(height: 5),
-                              const DiceRollWidget(),
-                              const SizedBox(height: 5),
-                            ],
-                          );
-                        }),
-                      ),
-                    );
-                  }),
+                                        const SizedBox(width: 3),
+                                        Text(
+                                          '${orientation == Orientation.landscape && Utils.isMobileDevice() ? 'P' : 'Player'} ${index + 1} - ${playerController.players[index]?.position ?? 0} ',
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  shrinkWrap: true,
+                                  itemCount: playerController.players.where((element) => element?.position != null).toList().length,
+                                ),
+                                const Divider(),
+                                Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
+                                const SizedBox(height: 5),
+                                const DiceRollWidget(),
+                                const SizedBox(height: 5),
+                              ],
+                            );
+                          }),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
