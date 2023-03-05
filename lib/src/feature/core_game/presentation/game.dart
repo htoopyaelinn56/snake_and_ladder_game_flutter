@@ -6,16 +6,14 @@ import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-const List<Color> _playerColors = [
-  Colors.purple,
-  Colors.pink,
-  Colors.greenAccent,
-  Colors.cyanAccent,
-];
-
 class Game extends StatelessWidget {
   const Game({super.key});
-
+  static const Map<int, Color> playerColors = {
+    0: Colors.purple,
+    1: Colors.pink,
+    2: Colors.green,
+    3: Colors.cyan,
+  };
   @override
   Widget build(BuildContext context) {
     final isDesktop = Utils.isDesktop(context);
@@ -29,9 +27,7 @@ class Game extends StatelessWidget {
           children: [
             SizedBox(height: isDesktop ? 55 : 15),
             ResponsiveRowColumn(
-              layout: isDesktop
-                  ? ResponsiveRowColumnType.ROW
-                  : ResponsiveRowColumnType.COLUMN,
+              layout: isDesktop ? ResponsiveRowColumnType.ROW : ResponsiveRowColumnType.COLUMN,
               rowCrossAxisAlignment: CrossAxisAlignment.start,
               rowMainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -43,11 +39,9 @@ class Game extends StatelessWidget {
                     return SizedBox(
                       width: isDesktop ? 200 : null,
                       child: Padding(
-                        padding: EdgeInsets.only(
-                            left: isDesktop ? 10 : 25, top: 10, right: 25),
+                        padding: EdgeInsets.only(left: isDesktop ? 10 : 25, top: 10, right: 25),
                         child: Consumer(builder: (context, ref, _) {
-                          final playerController =
-                              ref.watch(playerControllerProvider);
+                          final playerController = ref.watch(playerControllerProvider);
 
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,14 +50,13 @@ class Game extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   return Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         margin: const EdgeInsets.only(top: 3),
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: _playerColors[index],
+                                          color: playerColors[index],
                                         ),
                                         padding: const EdgeInsets.all(5),
                                       ),
@@ -75,15 +68,10 @@ class Game extends StatelessWidget {
                                   );
                                 },
                                 shrinkWrap: true,
-                                itemCount: playerController.players
-                                    .where(
-                                        (element) => element?.position != null)
-                                    .toList()
-                                    .length,
+                                itemCount: playerController.players.where((element) => element?.position != null).toList().length,
                               ),
                               const Divider(),
-                              Text(
-                                  'Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
+                              Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
                               const SizedBox(height: 5),
                               const DiceRollWidget(),
                               const SizedBox(height: 5),

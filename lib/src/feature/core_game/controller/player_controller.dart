@@ -38,6 +38,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             currentTurn: 0,
             totalPlayers: 1, someoneWins: false,
             isMoving: false, diceNumber: math.Random().nextInt(6) + 1,
+            myPosition: -1, //only need for multiplayer
           ),
         );
 
@@ -58,18 +59,15 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
       final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
       // Checks if winning conditions are met
       if (currentPlayerPosition == 100) {
-        state.players[state.currentTurn] = state.players[state.currentTurn]
-            ?.copyWith(win: true, position: 100);
+        state.players[state.currentTurn] = state.players[state.currentTurn]?.copyWith(win: true, position: 100);
         // Declares winnner when someone wins
-        Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins',
-            width: Utils.isMobileDevice() ? null : 500);
+        Utils.showCommonSnackBar('Player ${state.currentTurn + 1} wins', width: Utils.isMobileDevice() ? null : 500);
         state = state.copyWith(players: state.players, someoneWins: true);
         return;
       }
     }
 
-    state = state.copyWith(
-        players: state.players, currentTurn: state.currentTurn + 1);
+    state = state.copyWith(players: state.players, currentTurn: state.currentTurn + 1);
 
     if (state.currentTurn >= state.totalPlayers) {
       state = state.copyWith(currentTurn: 0);
@@ -81,8 +79,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     final diceNumber = math.Random().nextInt(6) + 1;
     state = state.copyWith(isMoving: true, diceNumber: diceNumber);
     final currentTurn = state.currentTurn;
-    bool scoreLargerThan100 =
-        false; // Toggle switch for moving backwards when score > 100
+    bool scoreLargerThan100 = false; // Toggle switch for moving backwards when score > 100
 
     for (int i = 0; i < diceNumber; i++) {
       await Future.delayed(_animationDuartion);
@@ -91,11 +88,9 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
 
       // Moves backwards if score larger than 100
       if (scoreLargerThan100) {
-        state.players[currentTurn] = state.players[state.currentTurn]
-            ?.copyWith(position: currentPlayerPosition - 1);
+        state.players[currentTurn] = state.players[state.currentTurn]?.copyWith(position: currentPlayerPosition - 1);
       } else {
-        state.players[currentTurn] = state.players[state.currentTurn]
-            ?.copyWith(position: currentPlayerPosition + 1);
+        state.players[currentTurn] = state.players[state.currentTurn]?.copyWith(position: currentPlayerPosition + 1);
       }
       state = state.copyWith(players: state.players);
 
@@ -108,8 +103,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     }
 
     //  Moves player to endpoint of the snake or ladder
-    final snakeOrLadderPosition =
-        _snakeLadderPoints[state.players[currentTurn]?.position ?? 1];
+    final snakeOrLadderPosition = _snakeLadderPoints[state.players[currentTurn]?.position ?? 1];
     if (snakeOrLadderPosition != null) {
       for (int i = 0; i < snakeOrLadderPosition.length; i++) {
         await Future.delayed(_animationDuartion);
@@ -121,9 +115,12 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     }
     state = state.copyWith(isMoving: false);
   }
+
+  void setMyPoistion(int position) {
+    state = state.copyWith(myPosition: position);
+  }
 }
 
-final playerControllerProvider =
-    StateNotifierProvider<PlayerController, PlayerStateModel>((ref) {
+final playerControllerProvider = StateNotifierProvider<PlayerController, PlayerStateModel>((ref) {
   return PlayerController();
 });

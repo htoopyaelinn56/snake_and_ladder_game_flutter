@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   rxdart: ^0.27.7
-  flutter_riverpod: ^2.1.3
+  flutter_riverpod: ^2.3.0
   hooks_riverpod: ^2.1.3
   responsive_framework: ^0.2.0
   desktop_window: ^0.4.0
@@ -44,6 +44,7 @@ dependencies:
   flutter_animate: ^4.1.0
   flutter_hooks: ^0.18.6
   web_socket_channel: ^2.3.0
+  flutter_svg: ^2.0.2
 
 
 dev_dependencies:
@@ -72,7 +73,7 @@ flutter:
   assets:
   #  - assets/audio/
     - assets/images/
-  #  - assets/svgs/
+    - assets/svgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
