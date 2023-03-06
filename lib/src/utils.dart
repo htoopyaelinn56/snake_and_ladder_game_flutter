@@ -15,7 +15,15 @@ class Utils {
     return Platform.isAndroid || Platform.isFuchsia || Platform.isIOS;
   }
 
-  static Future<void> pagePusher({required BuildContext context, required Widget page, bool removeBackStack = false}) async {
+  static Future<void> pagePusher({required BuildContext context, required Widget page, bool removeBackStack = false, bool replaceRoute = false}) async {
+    if (replaceRoute) {
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => page),
+      );
+      return;
+    }
+
     await Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => page),
       (_) => !removeBackStack,

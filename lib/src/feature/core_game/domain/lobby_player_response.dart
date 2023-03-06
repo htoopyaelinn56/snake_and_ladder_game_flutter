@@ -2,7 +2,8 @@ class LobbyPlayerResponse {
   List<Data>? data;
   bool? host;
   int? you;
-  LobbyPlayerResponse({this.data, this.host});
+  bool? start;
+  LobbyPlayerResponse({this.data, this.host, this.you, this.start});
 
   LobbyPlayerResponse.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -14,6 +15,7 @@ class LobbyPlayerResponse {
     }
     host = json['host'];
     you = json['you'];
+    start = json['start'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +25,7 @@ class LobbyPlayerResponse {
     }
     data['host'] = host;
     data['you'] = you;
+    data['start'] = start;
     return data;
   }
 }

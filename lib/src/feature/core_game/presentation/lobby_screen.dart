@@ -1,5 +1,4 @@
 import 'dart:async' show Timer;
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/p
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/game.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/repository/core_game_repository.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LobbyScreen extends StatefulWidget {
   const LobbyScreen({super.key});
@@ -19,7 +17,25 @@ class LobbyScreen extends StatefulWidget {
 
 class _LobbyScreenState extends State<LobbyScreen> {
   Timer? timer;
-  int time = 10;
+  int time = 5;
+
+  void setTimer(WidgetRef ref, int players) {
+    if (timer?.isActive == false || timer == null) {
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (time >= 1 && mounted) {
+          setState(() {
+            time--;
+          });
+        }
+        if (time == 0) {
+          timer.cancel();
+          ref.read(playerControllerProvider.notifier).setPlayer(playerCount: players);
+          Utils.pagePusher(context: context, page: const Game(), replaceRoute: true);
+          return;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +49,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
             state.whenOrNull(
               data: (data) {
                 ref.read(playerControllerProvider.notifier).setMyPoistion(data.you!);
+                if (data.start!) {
+                  setTimer(ref, data.data!.length);
+                }
               },
             );
           });
@@ -99,16 +118,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
                           if (data.host!)
                             CommonButton(
                               onSubmit: () {
-                                if (timer?.isActive == false || timer == null) {
-                                  timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-                                    if (time >= 1) {
-                                      setState(() {
-                                        time--;
-                                      });
-                                    }
-                                  });
-                                }
-
                                 ref.read(webSocketProvider).sink.add('data');
                               },
                               child: const Text('Start Game'),
