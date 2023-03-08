@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_and_ladder_game/src/constants.dart';
 
@@ -8,10 +9,16 @@ import '../main.dart';
 
 class Utils {
   static bool isDesktop(BuildContext context) {
+    if (kIsWeb) {
+      return true;
+    }
     return ResponsiveWrapper.of(context).isDesktop || ResponsiveWrapper.of(context).isTablet;
   }
 
   static bool isMobileDevice() {
+    if (kIsWeb) {
+      return false;
+    }
     return Platform.isAndroid || Platform.isFuchsia || Platform.isIOS;
   }
 

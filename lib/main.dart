@@ -1,4 +1,5 @@
 import 'package:desktop_window/desktop_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation/play_screen.dart';
@@ -8,7 +9,7 @@ import 'dart:io' show Platform;
 final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+  if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
     await DesktopWindow.setMinWindowSize(const Size(1200, 900));
     await DesktopWindow.setWindowSize(const Size(1200, 900));
   }
