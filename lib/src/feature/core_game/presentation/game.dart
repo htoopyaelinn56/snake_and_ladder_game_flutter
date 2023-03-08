@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/controller/player_controller.dart';
@@ -6,7 +8,9 @@ import 'package:flutter_snake_and_ladder_game/src/feature/core_game/presentation
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-class Game extends StatelessWidget {
+import '../repository/core_game_repository.dart';
+
+class Game extends ConsumerStatefulWidget {
   const Game({super.key});
   static const Map<int, Color> playerColors = {
     0: Colors.purple,
@@ -14,9 +18,32 @@ class Game extends StatelessWidget {
     2: Colors.green,
     3: Colors.cyan,
   };
+
+  @override
+  ConsumerState<Game> createState() => _GameState();
+}
+
+class _GameState extends ConsumerState<Game> {
+  @override
+  void initState() {
+    super.initState();
+    assignSelf();
+  }
+
+  void assignSelf() {
+    final position = ref.read(playerControllerProvider).myPosition;
+    final payload = {
+      'dice_num': -1,
+      'my_turn': position,
+    };
+    ref.read(gameWebSocketProvider).sink.add(jsonEncode(payload));
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = Utils.isDesktop(context);
+    final playerController = ref.watch(playerControllerProvider);
+    ref.listen(listenGameWebSocketProvider, (_, state) {});
     return Scaffold(
       appBar: AppBar(
         title: const Text('Snake And Ladder'),
@@ -41,44 +68,55 @@ class Game extends StatelessWidget {
                         width: isDesktop ? 200 : null,
                         child: Padding(
                           padding: EdgeInsets.only(left: isDesktop ? 10 : 25, top: 10, right: 25),
-                          child: Consumer(builder: (context, ref, _) {
-                            final playerController = ref.watch(playerControllerProvider);
-
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ListView.builder(
-                                  itemBuilder: (context, index) {
-                                    return Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 3),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: playerColors[index],
-                                          ),
-                                          padding: const EdgeInsets.all(5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ListView.builder(
+                                itemBuilder: (context, index) {
+                                  final isMe = playerController.myPosition == index;
+                                  final currentTurn = playerController.currentTurn == index;
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 3),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Game.playerColors[index],
                                         ),
-                                        const SizedBox(width: 3),
-                                        Text(
+                                        padding: const EdgeInsets.all(5),
+                                      ),
+                                      const SizedBox(width: 3),
+                                      SizedBox(
+                                        width: 90,
+                                        child: Text(
                                           '${orientation == Orientation.landscape && Utils.isMobileDevice() ? 'P' : 'Player'} ${index + 1} - ${playerController.players[index]?.position ?? 0} ',
+                                          style: TextStyle(
+                                            color: currentTurn ? Game.playerColors[index] : null,
+                                          ),
                                         ),
-                                      ],
-                                    );
-                                  },
-                                  shrinkWrap: true,
-                                  itemCount: playerController.players.where((element) => element?.position != null).toList().length,
-                                ),
-                                const Divider(),
-                                Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
-                                const SizedBox(height: 5),
-                                const DiceRollWidget(),
-                                const SizedBox(height: 5),
-                              ],
-                            );
-                          }),
+                                      ),
+                                      if (isMe)
+                                        const Text('(You)')
+                                      else
+                                        const Text(
+                                          '(You)',
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                    ],
+                                  );
+                                },
+                                shrinkWrap: true,
+                                itemCount: playerController.players.where((element) => element?.position != null).toList().length,
+                              ),
+                              const Divider(),
+                              Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
+                              const SizedBox(height: 5),
+                              const DiceRollWidget(),
+                              const SizedBox(height: 5),
+                            ],
+                          ),
                         ),
                       );
                     },

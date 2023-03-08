@@ -3,7 +3,14 @@ class LobbyPlayerResponse {
   bool? host;
   int? you;
   bool? start;
-  LobbyPlayerResponse({this.data, this.host, this.you, this.start});
+  int? timer;
+  LobbyPlayerResponse({
+    this.data,
+    this.host,
+    this.you,
+    this.start,
+    this.timer,
+  });
 
   LobbyPlayerResponse.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -16,6 +23,7 @@ class LobbyPlayerResponse {
     host = json['host'];
     you = json['you'];
     start = json['start'];
+    timer = json['timer'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,6 +34,7 @@ class LobbyPlayerResponse {
     data['host'] = host;
     data['you'] = you;
     data['start'] = start;
+    data['timer'] = timer;
     return data;
   }
 }
