@@ -105,9 +105,11 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
                         const SizedBox(height: 10),
                         if (data.host!)
                           CommonButton(
-                            onSubmit: () {
-                              ref.read(lobbyWebSocketProvider).sink.add('start');
-                            },
+                            onSubmit: time == -1
+                                ? () {
+                                    ref.read(lobbyWebSocketProvider).sink.add('start');
+                                  }
+                                : null,
                             child: const Text('Start Game'),
                           ),
                         const SizedBox(height: 20),

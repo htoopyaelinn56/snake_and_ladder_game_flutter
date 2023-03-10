@@ -26,23 +26,23 @@ class NumberBlock extends StatelessWidget {
     final isDesktop = Utils.isDesktop(context);
     return Stack(
       children: [
-        if (!onlyPlayers)
-          Container(
-            decoration:
-                BoxDecoration(color: color, border: Border.all(width: .3)),
-            padding: const EdgeInsets.only(right: 5),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                number,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.scrim,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
+        Container(
+          decoration: onlyPlayers ? null : BoxDecoration(color: color, border: Border.all(width: .3)),
+          padding: const EdgeInsets.only(right: 5),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: onlyPlayers
+                ? Text(
+                    number,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.scrim,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  )
+                : null,
           ),
+        ),
         if (onlyPlayers)
           Positioned.fill(
             child: Stack(

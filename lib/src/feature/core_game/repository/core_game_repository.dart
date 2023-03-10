@@ -18,7 +18,6 @@ final listenLobbySocketProvider = StreamProvider.autoDispose<LobbyPlayerResponse
   ref.onDispose(() => channel.sink.close());
 
   await for (final i in channel.stream.asBroadcastStream()) {
-    print(i);
     yield LobbyPlayerResponse.fromJson(jsonDecode(i));
   }
 });
