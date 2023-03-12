@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_snake_and_ladder_game/src/feature/core_game/domain/game_dice_response.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../constants.dart';
 import '../../../utils.dart';
@@ -29,11 +30,11 @@ final gameWebSocketProvider = Provider.autoDispose<WebSocketChannel>((ref) {
   return channel;
 });
 
-final listenGameWebSocketProvider = StreamProvider.autoDispose<LobbyPlayerResponse>((ref) async* {
+final listenGameWebSocketProvider = StreamProvider.autoDispose<GameDiceResponse>((ref) async* {
   final channel = ref.watch(gameWebSocketProvider);
   ref.onDispose(() => channel.sink.close());
 
   await for (final i in channel.stream.asBroadcastStream()) {
-    print(i);
+    yield GameDiceResponse.fromJson(jsonDecode(i));
   }
 });

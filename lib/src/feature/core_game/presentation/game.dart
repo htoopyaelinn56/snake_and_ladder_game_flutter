@@ -113,7 +113,23 @@ class _GameState extends ConsumerState<Game> {
                               const Divider(),
                               Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
                               const SizedBox(height: 5),
-                              const DiceRollWidget(),
+                              ref.watch(listenGameWebSocketProvider).when(
+                                    data: (data) {
+                                      if (data.canStart == false) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      return const DiceRollWidget();
+                                    },
+                                    error: (e, st) => Text(
+                                      '$e',
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                    loading: () => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
                               const SizedBox(height: 5),
                             ],
                           ),

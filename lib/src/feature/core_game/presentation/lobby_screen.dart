@@ -34,9 +34,11 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
     ref.listen(listenLobbySocketProvider, (_, state) {
       state.whenOrNull(
         data: (data) {
-          setTimer(players: data.data!.length, timer: data.timer!);
-          if (data.timer == -1) {
-            ref.read(playerControllerProvider.notifier).setMyPoistion(data.you!);
+          if (data.data != null) {
+            setTimer(players: data.data!.length, timer: data.timer!);
+            if (data.timer == -1) {
+              ref.read(playerControllerProvider.notifier).setMyPoistion(data.you!);
+            }
           }
         },
       );
