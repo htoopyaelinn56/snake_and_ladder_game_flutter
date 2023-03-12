@@ -51,7 +51,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     state = state.copyWith(players: state.players, totalPlayers: playerCount);
   }
 
-  Future<void> dice() async {
+  Future<void> dice({bool isMutltiPlayer = false}) async {
     final currentTurn = state.currentTurn;
 
     if (state.players[currentTurn]?.win == false) {

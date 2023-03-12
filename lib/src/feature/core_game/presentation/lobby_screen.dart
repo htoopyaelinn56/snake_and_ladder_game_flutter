@@ -22,7 +22,12 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
     });
     if (time == 0) {
       ref.read(playerControllerProvider.notifier).setPlayer(playerCount: players);
-      Utils.pagePusher(context: context, page: const Game(), replaceRoute: true);
+      Utils.pagePusher(
+          context: context,
+          page: const Game(
+            isMultiplayer: true,
+          ),
+          replaceRoute: true);
       return;
     }
   }

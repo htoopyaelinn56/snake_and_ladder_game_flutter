@@ -11,13 +11,18 @@ import 'package:responsive_framework/responsive_framework.dart';
 import '../repository/core_game_repository.dart';
 
 class Game extends ConsumerStatefulWidget {
-  const Game({super.key});
+  const Game({
+    super.key,
+    this.isMultiplayer = false,
+  });
   static const Map<int, Color> playerColors = {
     0: Colors.purple,
     1: Colors.pink,
     2: Colors.green,
     3: Colors.cyan,
   };
+
+  final bool isMultiplayer;
 
   @override
   ConsumerState<Game> createState() => _GameState();
@@ -113,23 +118,32 @@ class _GameState extends ConsumerState<Game> {
                               const Divider(),
                               Text('Player ${ref.watch(playerControllerProvider).currentTurn + 1}\'s turn'),
                               const SizedBox(height: 5),
-                              ref.watch(listenGameWebSocketProvider).when(
-                                    data: (data) {
-                                      if (data.canStart == false) {
-                                        return const Center(
+                              widget.isMultiplayer
+                                  ? ref.watch(listenGameWebSocketProvider).when(
+                                        data: (data) {
+                                          final isMyTurn = playerController.myPosition == data.currentTurn;
+                                          if (data.canStart == false) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          }
+                                          return DiceRollWidget(
+                                            enabled: isMyTurn,
+                                            isMultiplayer: widget.isMultiplayer,
+                                          );
+                                        },
+                                        error: (e, st) => Text(
+                                          '$e',
+                                          style: const TextStyle(color: Colors.red),
+                                        ),
+                                        loading: () => const Center(
                                           child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      return const DiceRollWidget();
-                                    },
-                                    error: (e, st) => Text(
-                                      '$e',
-                                      style: const TextStyle(color: Colors.red),
+                                        ),
+                                      )
+                                  : DiceRollWidget(
+                                      enabled: true,
+                                      isMultiplayer: widget.isMultiplayer,
                                     ),
-                                    loading: () => const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ),
                               const SizedBox(height: 5),
                             ],
                           ),

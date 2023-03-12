@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 
 class Dice extends StatelessWidget {
-  const Dice({super.key, required this.number})
-      : assert(number >= 1 && number <= 6);
+  const Dice({
+    super.key,
+    required this.number,
+    this.enabled = true,
+  }) : assert(number >= 1 && number <= 6);
   final int number;
+  final bool enabled;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(5)),
+        color: enabled ? Theme.of(context).colorScheme.primary : Colors.grey,
+        borderRadius: BorderRadius.circular(5),
+      ),
       padding: const EdgeInsets.all(5),
       child: Column(
-        mainAxisAlignment: number == 1
-            ? MainAxisAlignment.center
-            : MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: number == 1 ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
         children: () {
           if (number == 1) {
             return [
