@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_snake_and_ladder_game/src/common/common_widgets/common_button.dart';
@@ -54,8 +55,8 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
             const SizedBox(height: 15),
             CommonButton(
               onSubmit: () {
-                ref.read(playerControllerProvider.notifier).setPlayer(
-                    playerCount: _PlayerType.values.indexOf(type) + 2);
+                ref.read(playerControllerProvider.notifier).setPlayer(playerCount: _PlayerType.values.indexOf(type) + 2);
+
                 Utils.pagePusher(
                   context: context,
                   page: const Game(),
@@ -66,9 +67,11 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
             ),
             const SizedBox(height: 20),
             CommonButton(
-              onSubmit: () {
-                Utils.pagePusher(context: context, page: const LobbyScreen());
-              },
+              onSubmit: kDebugMode
+                  ? () {
+                      Utils.pagePusher(context: context, page: const LobbyScreen());
+                    }
+                  : null,
               child: const Text('Play Multiplayer'),
             ),
           ],

@@ -35,6 +35,7 @@ final listenGameWebSocketProvider = StreamProvider.autoDispose<GameDiceResponse>
   ref.onDispose(() => channel.sink.close());
 
   await for (final i in channel.stream.asBroadcastStream()) {
+    print('in game $i');
     yield GameDiceResponse.fromJson(jsonDecode(i));
   }
 });

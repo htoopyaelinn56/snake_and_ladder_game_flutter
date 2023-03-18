@@ -10,10 +10,13 @@ class DiceRollWidget extends ConsumerStatefulWidget {
     super.key,
     required this.isMultiplayer,
     required this.enabled,
+    required this.currentTurn,
   });
   final bool isMultiplayer;
   final bool enabled;
 
+  ///null in local
+  final int? currentTurn;
   @override
   ConsumerState<DiceRollWidget> createState() => _DiceRollWidgetState();
 }
@@ -39,7 +42,10 @@ class _DiceRollWidgetState extends ConsumerState<DiceRollWidget> with SingleTick
             : () async {
                 animationController.value = 0;
                 animationController.forward().then((value) {
-                  ref.read(playerControllerProvider.notifier).dice(isMutltiPlayer: widget.isMultiplayer);
+                  ref.read(playerControllerProvider.notifier).dice(
+                        isMutltiPlayer: widget.isMultiplayer,
+                        currentTurnFromServer: widget.currentTurn,
+                      );
                 });
               },
         child: Dice(

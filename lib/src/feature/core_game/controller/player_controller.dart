@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 import 'package:flutter_snake_and_ladder_game/src/feature/core_game/domain/player_state_model.dart';
 import 'package:flutter_snake_and_ladder_game/src/utils.dart';
 
 import '../domain/player_model.dart';
+import '../repository/core_game_repository.dart';
 
 //points to animate
 const Map<int, List<int>> _snakeLadderPoints = {
@@ -24,7 +27,7 @@ const Map<int, List<int>> _snakeLadderPoints = {
 };
 
 class PlayerController extends StateNotifier<PlayerStateModel> {
-  PlayerController()
+  PlayerController(this.ref)
       : super(
           // dont constant it because it will be modified
           PlayerStateModel(
@@ -41,7 +44,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
             myPosition: -1, //only need for multiplayer
           ),
         );
-
+  final Ref ref;
   static const _animationDuartion = Duration(milliseconds: 150);
 
   void setPlayer({required int playerCount}) {
@@ -51,11 +54,13 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
     state = state.copyWith(players: state.players, totalPlayers: playerCount);
   }
 
-  Future<void> dice({bool isMutltiPlayer = false}) async {
-    final currentTurn = state.currentTurn;
+  Future<void> dice({bool isMutltiPlayer = false, int? currentTurnFromServer /* null if local  */}) async {
+    final currentTurn = isMutltiPlayer ? currentTurnFromServer! : state.currentTurn;
+    final diceNumber = math.Random().nextInt(6) + 1;
 
+    _sendToServer(diceNumber);
     if (state.players[currentTurn]?.win == false) {
-      await _moving();
+      await _moving(diceNumber);
       final currentPlayerPosition = state.players[currentTurn]?.position ?? 1;
       // Checks if winning conditions are met
       if (currentPlayerPosition == 100) {
@@ -75,8 +80,7 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
   }
 
   //  Function for moving player avatars
-  Future<void> _moving() async {
-    final diceNumber = math.Random().nextInt(6) + 1;
+  Future<void> _moving(int diceNumber) async {
     state = state.copyWith(isMoving: true, diceNumber: diceNumber);
     final currentTurn = state.currentTurn;
     bool scoreLargerThan100 = false; // Toggle switch for moving backwards when score > 100
@@ -119,8 +123,16 @@ class PlayerController extends StateNotifier<PlayerStateModel> {
   void setMyPoistion(int position) {
     state = state.copyWith(myPosition: position);
   }
+
+  void _sendToServer(int diceNumber) {
+    final payload = {
+      'dice_num': diceNumber,
+      'my_turn': state.myPosition,
+    };
+    ref.read(gameWebSocketProvider).sink.add(jsonEncode(payload));
+  }
 }
 
 final playerControllerProvider = StateNotifierProvider<PlayerController, PlayerStateModel>((ref) {
-  return PlayerController();
+  return PlayerController(ref);
 });

@@ -106,11 +106,11 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
                               );
                             },
                             shrinkWrap: true,
-                            itemCount: data.data!.length,
+                            itemCount: data.data?.length ?? 0,
                           ),
                         ),
                         const SizedBox(height: 10),
-                        if (data.host!)
+                        if (data.host ?? false)
                           CommonButton(
                             onSubmit: time == -1
                                 ? () {
