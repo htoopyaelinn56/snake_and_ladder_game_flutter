@@ -63,11 +63,11 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
                   removeBackStack: true,
                 );
               },
-              child: const Text('Play'),
+              child: const Text('Play Local With Friends'),
             ),
             const SizedBox(height: 20),
             CommonButton(
-              onSubmit: kDebugMode
+              onSubmit: kDebugMode && !kIsWeb
                   ? () {
                       Utils.pagePusher(context: context, page: const LobbyScreen());
                     }
