@@ -9,9 +9,6 @@ import '../main.dart';
 
 class Utils {
   static bool isDesktop(BuildContext context) {
-    if (kIsWeb) {
-      return true;
-    }
     return ResponsiveWrapper.of(context).isDesktop || ResponsiveWrapper.of(context).isTablet;
   }
 
